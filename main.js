@@ -25,6 +25,7 @@ class TaskListView extends BasesView {
     const chipOptions = {
       showLabels: this.config.get('showLabels') === true,
       relativeDates: this.config.get('dateFormat') !== 'absolute',
+      renderContext: this.app.renderContext,
     };
 
     const setStatus = (entry, status) =>
@@ -80,6 +81,7 @@ class TaskListView extends BasesView {
         title.onclick = () => this.startRename(title, row, entry.file);
 
         const meta = body.createDiv('sidebar-tasks-meta');
+        meta.onclick = (evt) => this.openClickedLink(evt, entry.file.path);
         for (const prop of this.config.getOrder()) {
           if (hiddenProps.has(prop)) continue;
           const value = entry.getValue(prop);
@@ -114,6 +116,17 @@ class TaskListView extends BasesView {
       this.config.set('collapsedSections', [...collapsed]);
     };
     return section;
+  }
+
+  openClickedLink(evt, sourcePath) {
+    const link = evt.target.closest('a.internal-link');
+    if (!link || evt.defaultPrevented) return;
+    evt.preventDefault();
+    evt.stopPropagation();
+    const linktext = link.dataset.href ?? link.getAttr('href');
+    const folder = this.app.vault.getFolderByPath(normalizePath(linktext));
+    if (folder) return this.app.internalPlugins?.getEnabledPluginById('file-explorer')?.revealInFolder(folder);
+    this.app.workspace.openLinkText(linktext, sourcePath, Keymap.isModEvent(evt));
   }
 
   startRename(titleEl, row, file) {
@@ -202,11 +215,11 @@ function addIconButton(parent, icon, label, onClick) {
   button.onclick = onClick;
 }
 
-function renderChip(parent, value, { label, relativeDates, canBeOverdue }) {
+function renderChip(parent, value, { label, relativeDates, canBeOverdue, renderContext }) {
   const chip = parent.createSpan('sidebar-tasks-chip');
   if (label) chip.createSpan({ cls: 'sidebar-tasks-chip-label', text: label });
   const valueEl = chip.createSpan();
-  if (typeof value.relative !== 'function') return value.renderTo(valueEl, { hoverPopover: null });
+  if (typeof value.relative !== 'function') return value.renderTo(valueEl, renderContext);
   valueEl.setText(relativeDates ? value.relative() : value.toString());
   chip.setAttr('title', value.toString());
   if (canBeOverdue && new Date(value.toString()) < startOfToday()) chip.addClass('is-overdue');

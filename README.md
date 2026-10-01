@@ -15,6 +15,7 @@ Each note in the base is a task. Its status lives in a frontmatter property (`st
 - **Collapsible sections:** collapsed state is saved in the base, and empty sections collapse automatically.
 - **Unknown status section** at the top for tasks with no status or a status that isn't configured.
 - **Due dates** are shown relative ("in 3 days") or absolute, and highlighted when overdue.
+- **Any property** can be shown under a task. Links open their note, and folder links reveal the folder in the file explorer.
 
 ## Getting started
 
