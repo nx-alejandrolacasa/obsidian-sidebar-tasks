@@ -4,7 +4,7 @@ A **Task list** view for [Bases](https://help.obsidian.md/bases), designed to si
 
 Each note in the base is a task. Its status lives in a frontmatter property (`status` by default).
 
-<!-- Add a screenshot: ![Sidebar Tasks](screenshot.png) -->
+![Sidebar Tasks](screenshot.png)
 
 ## Features
 
