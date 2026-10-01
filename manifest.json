@@ -1,7 +1,7 @@
 {
   "id": "sidebar-tasks",
   "name": "Sidebar Tasks",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "minAppVersion": "1.10.0",
   "description": "Task list view for Bases, made to live in the sidebar.",
   "author": "Alejandro Lacasa",
